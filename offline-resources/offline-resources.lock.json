@@ -1,0 +1,202 @@
+{
+  "generated_at": "2026-06-04T12:31:50.971Z",
+  "resources": [
+    {
+      "name": "clangd",
+      "repository": "https://github.com/clangd/clangd",
+      "release": {
+        "tag": "22.1.0",
+        "name": "22.1.0",
+        "html_url": "https://github.com/clangd/clangd/releases/tag/22.1.0",
+        "published_at": "2026-03-01T09:40:54Z"
+      },
+      "assets": [
+        {
+          "name": "linux-x64",
+          "fileName": "clangd-linux-22.1.0.zip",
+          "url": "https://github.com/clangd/clangd/releases/download/22.1.0/clangd-linux-22.1.0.zip",
+          "digest": "sha256:c54e57dbff3ccc9e8352367ddb7030ad3f624073ec58c7477424e7919f578572",
+          "size": 96066963,
+          "local_path": "offline-resources/clangd/clangd-linux-22.1.0.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "c54e57dbff3ccc9e8352367ddb7030ad3f624073ec58c7477424e7919f578572",
+          "digest_checked": true
+        }
+      ]
+    },
+    {
+      "name": "lua-language-server",
+      "repository": "https://github.com/LuaLS/lua-language-server",
+      "release": {
+        "tag": "3.18.2",
+        "name": "3.18.2",
+        "html_url": "https://github.com/LuaLS/lua-language-server/releases/tag/3.18.2",
+        "published_at": "2026-04-14T14:38:01Z"
+      },
+      "assets": [
+        {
+          "name": "linux-x64",
+          "fileName": "lua-language-server-3.18.2-linux-x64.tar.gz",
+          "url": "https://github.com/LuaLS/lua-language-server/releases/download/3.18.2/lua-language-server-3.18.2-linux-x64.tar.gz",
+          "digest": "sha256:ca71415dd19f19e30aaa35a4915aefca9fdb5fec31b98331cc3d77f778d539c5",
+          "size": 3646474,
+          "local_path": "offline-resources/lua-language-server/lua-language-server-3.18.2-linux-x64.tar.gz",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "ca71415dd19f19e30aaa35a4915aefca9fdb5fec31b98331cc3d77f778d539c5",
+          "digest_checked": true
+        }
+      ]
+    },
+    {
+      "name": "pyright",
+      "repository": "https://github.com/microsoft/pyright",
+      "release": {
+        "tag": "1.1.410",
+        "name": "Published 1.1.410",
+        "html_url": "https://github.com/microsoft/pyright/releases/tag/1.1.410",
+        "published_at": "2026-05-23T00:23:32Z"
+      },
+      "assets": [
+        {
+          "name": "source-zipball",
+          "fileName": "pyright-1.1.410.zip",
+          "url": "https://api.github.com/repos/microsoft/pyright/zipball/1.1.410",
+          "digest": null,
+          "size": 8288196,
+          "local_path": "offline-resources/pyright/pyright-1.1.410.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "3dcbfa2f2bb72539d03e355a7a554abad927b2bd6255aa5f35045f87dd329b32",
+          "digest_checked": false
+        }
+      ]
+    },
+    {
+      "name": "eclipse-jdt-ls",
+      "skipped": true,
+      "reason": "JDT LS release artifacts are commonly consumed from Eclipse download archives; keep GitHub release metadata for traceability."
+    },
+    {
+      "name": "tree-sitter-cli",
+      "repository": "https://github.com/tree-sitter/tree-sitter",
+      "release": {
+        "tag": "v0.26.9",
+        "name": "v0.26.9",
+        "html_url": "https://github.com/tree-sitter/tree-sitter/releases/tag/v0.26.9",
+        "published_at": "2026-05-19T18:08:19Z"
+      },
+      "assets": [
+        {
+          "name": "linux-x64",
+          "fileName": "tree-sitter-cli-linux-x64.zip",
+          "url": "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.9/tree-sitter-cli-linux-x64.zip",
+          "digest": "sha256:0ea5daaef79145fe73786f0e3cdc43b62b22ddb36f7f6676c9f8bb72434d78e9",
+          "size": 8068988,
+          "local_path": "offline-resources/tree-sitter-cli/tree-sitter-cli-linux-x64.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "0ea5daaef79145fe73786f0e3cdc43b62b22ddb36f7f6676c9f8bb72434d78e9",
+          "digest_checked": true
+        }
+      ]
+    },
+    {
+      "name": "tree-sitter-python",
+      "repository": "https://github.com/tree-sitter/tree-sitter-python",
+      "release": {
+        "tag": "v0.25.0",
+        "name": "v0.25.0",
+        "html_url": "https://github.com/tree-sitter/tree-sitter-python/releases/tag/v0.25.0",
+        "published_at": "2025-09-11T06:46:18Z"
+      },
+      "assets": [
+        {
+          "name": "source-zipball",
+          "fileName": "tree-sitter-python-v0.25.0.zip",
+          "url": "https://api.github.com/repos/tree-sitter/tree-sitter-python/zipball/v0.25.0",
+          "digest": null,
+          "size": 296256,
+          "local_path": "offline-resources/tree-sitter-python/tree-sitter-python-v0.25.0.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "92479647cb9a00320f12ad48edcf07ffd69cef8632c8caf063d66059492acfd4",
+          "digest_checked": false
+        }
+      ]
+    },
+    {
+      "name": "tree-sitter-lua",
+      "repository": "https://github.com/tree-sitter-grammars/tree-sitter-lua",
+      "release": {
+        "tag": "v0.5.0",
+        "name": "v0.5.0",
+        "html_url": "https://github.com/tree-sitter-grammars/tree-sitter-lua/releases/tag/v0.5.0",
+        "published_at": "2026-02-26T17:05:08Z"
+      },
+      "assets": [
+        {
+          "name": "source-zipball",
+          "fileName": "tree-sitter-lua-v0.5.0.zip",
+          "url": "https://api.github.com/repos/tree-sitter-grammars/tree-sitter-lua/zipball/v0.5.0",
+          "digest": null,
+          "size": 88950,
+          "local_path": "offline-resources/tree-sitter-lua/tree-sitter-lua-v0.5.0.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "8d7d3bed5a35d454e29874e522cec0b3e5c827b2732cdd4bde135fc252053a2c",
+          "digest_checked": false
+        }
+      ]
+    },
+    {
+      "name": "tree-sitter-cpp",
+      "repository": "https://github.com/tree-sitter/tree-sitter-cpp",
+      "release": {
+        "tag": "v0.23.4",
+        "name": "v0.23.4",
+        "html_url": "https://github.com/tree-sitter/tree-sitter-cpp/releases/tag/v0.23.4",
+        "published_at": "2024-11-11T06:58:06Z"
+      },
+      "assets": [
+        {
+          "name": "source-zipball",
+          "fileName": "tree-sitter-cpp-v0.23.4.zip",
+          "url": "https://api.github.com/repos/tree-sitter/tree-sitter-cpp/zipball/v0.23.4",
+          "digest": null,
+          "size": 1150468,
+          "local_path": "offline-resources/tree-sitter-cpp/tree-sitter-cpp-v0.23.4.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "f8909de0a220bddd3d1d04aa7639e871868bd385c2ba6425758b69ce284affad",
+          "digest_checked": false
+        }
+      ]
+    },
+    {
+      "name": "tree-sitter-java",
+      "repository": "https://github.com/tree-sitter/tree-sitter-java",
+      "release": {
+        "tag": "v0.23.5",
+        "name": "v0.23.5",
+        "html_url": "https://github.com/tree-sitter/tree-sitter-java/releases/tag/v0.23.5",
+        "published_at": "2024-12-21T18:22:33Z"
+      },
+      "assets": [
+        {
+          "name": "source-zipball",
+          "fileName": "tree-sitter-java-v0.23.5.zip",
+          "url": "https://api.github.com/repos/tree-sitter/tree-sitter-java/zipball/v0.23.5",
+          "digest": null,
+          "size": 227236,
+          "local_path": "offline-resources/tree-sitter-java/tree-sitter-java-v0.23.5.zip",
+          "cache_hit": false,
+          "verified": true,
+          "sha256": "18cce62737ff8a03bae7565d06e7a22a7a0d971b54a8a0b89aa14fed6976a152",
+          "digest_checked": false
+        }
+      ]
+    }
+  ]
+}
