@@ -1,0 +1,38 @@
+{
+  "projects": [
+    {
+      "name": "user-service",
+      "repository_full_name": "org/user-service",
+      "clone_url": "https://github.com/org/user-service.git",
+      "default_branch": "main",
+      "credential_ref": "github-readonly-key",
+      "languages": ["python", "java"],
+      "options": {
+        "max_call_depth": 2,
+        "enable_ai_review": true,
+        "enable_static_rules": true
+      },
+      "ai": {
+        "provider": "qwen",
+        "model": "qwen-plus",
+        "max_input_tokens": 120000,
+        "max_output_tokens": 8000
+      },
+      "rules": {
+        "custom_rules": [
+          {
+            "id": "PROJECT-PY-ANNOTATION",
+            "language": "python",
+            "severity": "WARNING",
+            "category": "Style",
+            "description": "Project service functions should expose type annotations.",
+            "pattern": "^def service_[^(]+\\([^)]*\\):",
+            "suggestion": "Add explicit argument and return type annotations."
+          }
+        ]
+      },
+      "retention_days": 30,
+      "protected_branch_retention_days": 180
+    }
+  ]
+}

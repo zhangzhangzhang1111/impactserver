@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "generated_from": "ai_code_impact_analysis_design.md",
+  "resources": [
+    {
+      "name": "clangd",
+      "kind": "lsp",
+      "language": "cpp",
+      "repository": "https://github.com/clangd/clangd",
+      "releaseApiUrl": "https://api.github.com/repos/clangd/clangd/releases/latest",
+      "assets": [
+        {
+          "name": "linux-x64",
+          "pattern": "^clangd-linux-.*\\.zip$"
+        }
+      ]
+    },
+    {
+      "name": "lua-language-server",
+      "kind": "lsp",
+      "language": "lua",
+      "repository": "https://github.com/LuaLS/lua-language-server",
+      "releaseApiUrl": "https://api.github.com/repos/LuaLS/lua-language-server/releases/latest",
+      "assets": [
+        {
+          "name": "linux-x64",
+          "pattern": "^lua-language-server-.*linux-x64.*\\.tar\\.gz$"
+        }
+      ]
+    },
+    {
+      "name": "pyright",
+      "kind": "lsp-static",
+      "language": "python",
+      "repository": "https://github.com/microsoft/pyright",
+      "releaseApiUrl": "https://api.github.com/repos/microsoft/pyright/releases/latest",
+      "sourceArchive": "zipball",
+      "notes": "Pyright is commonly distributed through npm/PyPI; this entry records the upstream GitHub release for offline packaging."
+    },
+    {
+      "name": "eclipse-jdt-ls",
+      "kind": "lsp",
+      "language": "java",
+      "repository": "https://github.com/eclipse-jdtls/eclipse.jdt.ls",
+      "releaseApiUrl": "https://api.github.com/repos/eclipse-jdtls/eclipse.jdt.ls/releases/latest",
+      "skipDownload": true,
+      "reason": "JDT LS release artifacts are commonly consumed from Eclipse download archives; keep GitHub release metadata for traceability."
+    },
+    {
+      "name": "tree-sitter-cli",
+      "kind": "tree-sitter-cli",
+      "language": "all",
+      "repository": "https://github.com/tree-sitter/tree-sitter",
+      "releaseApiUrl": "https://api.github.com/repos/tree-sitter/tree-sitter/releases/latest",
+      "assets": [
+        {
+          "name": "linux-x64",
+          "pattern": "^tree-sitter-cli-linux-x64\\.zip$"
+        }
+      ]
+    },
+    {
+      "name": "tree-sitter-python",
+      "kind": "tree-sitter-grammar",
+      "language": "python",
+      "repository": "https://github.com/tree-sitter/tree-sitter-python",
+      "releaseApiUrl": "https://api.github.com/repos/tree-sitter/tree-sitter-python/releases/latest",
+      "sourceArchive": "zipball"
+    },
+    {
+      "name": "tree-sitter-lua",
+      "kind": "tree-sitter-grammar",
+      "language": "lua",
+      "repository": "https://github.com/tree-sitter-grammars/tree-sitter-lua",
+      "releaseApiUrl": "https://api.github.com/repos/tree-sitter-grammars/tree-sitter-lua/releases/latest",
+      "sourceArchive": "zipball"
+    },
+    {
+      "name": "tree-sitter-cpp",
+      "kind": "tree-sitter-grammar",
+      "language": "cpp",
+      "repository": "https://github.com/tree-sitter/tree-sitter-cpp",
+      "releaseApiUrl": "https://api.github.com/repos/tree-sitter/tree-sitter-cpp/releases/latest",
+      "sourceArchive": "zipball"
+    },
+    {
+      "name": "tree-sitter-java",
+      "kind": "tree-sitter-grammar",
+      "language": "java",
+      "repository": "https://github.com/tree-sitter/tree-sitter-java",
+      "releaseApiUrl": "https://api.github.com/repos/tree-sitter/tree-sitter-java/releases/latest",
+      "sourceArchive": "zipball"
+    }
+  ]
+}
