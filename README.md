@@ -48,15 +48,6 @@ IMPACT_PROTECTED_BRANCH_RETENTION_DAYS=180
 IMPACT_AUTO_RUN_TASKS=true
 IMPACT_WORKER_CONCURRENCY=1
 IMPACT_TASK_TIMEOUT_MS=0
-IMPACT_AI_ENABLED=false
-IMPACT_AI_PROVIDER=
-IMPACT_AI_BASE_URL=
-IMPACT_AI_API_KEY=
-IMPACT_AI_MODEL=default
-IMPACT_AI_TIMEOUT_MS=60000
-IMPACT_AI_MAX_RETRIES=2
-IMPACT_AI_MAX_OUTPUT_TOKENS=0
-IMPACT_AI_ANTHROPIC_VERSION=2023-06-01
 ```
 
 If `IMPACT_API_TOKEN` is set, API callers must send:
@@ -316,17 +307,9 @@ Current manifest coverage:
 
 ## AI review
 
-Enable AI review globally with environment variables:
+AI model/provider defaults are configured in `config/ai-providers.json`, not through global model environment variables. The JSON file controls which providers are enabled, which one is the default, model IDs, endpoint overrides, timeouts, retry counts, and output token limits. API keys are not stored in JSON; each provider names an `api_key_env` variable, and the server reads that environment variable at startup.
 
-```bash
-IMPACT_AI_ENABLED=true \
-IMPACT_AI_PROVIDER=qwen \
-IMPACT_AI_API_KEY=secret \
-IMPACT_AI_MODEL=qwen-plus \
-npm start
-```
-
-Supported provider values:
+Default `config/ai-providers.json` provider IDs:
 
 | Provider | Official request shape | Default endpoint |
 | --- | --- | --- |
@@ -337,28 +320,55 @@ Supported provider values:
 | `qwen` | Alibaba Cloud Model Studio DashScope OpenAI-compatible API | `https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions` |
 | `doubao` | Volcengine Ark OpenAI SDK-compatible API | `https://ark.cn-beijing.volces.com/api/v3/chat/completions` |
 | `minimax` | MiniMax official text chat completion API | `https://api.minimax.io/v1/text/chatcompletion_v2` |
-| `openai-compatible` | Custom OpenAI-compatible Chat Completions gateway | Set `IMPACT_AI_BASE_URL` |
- 
-Examples:
+| `openai-compatible` | Custom OpenAI-compatible Chat Completions gateway | Set `base_url` in `config/ai-providers.json` |
+
+Example provider entry:
+
+```json
+{
+  "id": "qwen",
+  "name": "通义千问 / DashScope 百炼",
+  "enabled": true,
+  "provider": "qwen",
+  "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "model": "qwen-plus",
+  "api_key_env": "DASHSCOPE_API_KEY",
+  "max_input_tokens": 120000,
+  "max_output_tokens": 8000,
+  "timeout_ms": 60000,
+  "max_retries": 2
+}
+```
+
+Start with API keys injected from the shell:
 
 ```bash
-# OpenAI
-IMPACT_AI_ENABLED=true IMPACT_AI_PROVIDER=openai IMPACT_AI_API_KEY=sk-... IMPACT_AI_MODEL=gpt-5.1 npm start
+DASHSCOPE_API_KEY=... \
+DEEPSEEK_API_KEY=... \
+ARK_API_KEY=... \
+MINIMAX_API_KEY=... \
+OPENAI_API_KEY=... \
+ANTHROPIC_API_KEY=... \
+GEMINI_API_KEY=... \
+npm start
+```
 
-# DeepSeek
-IMPACT_AI_ENABLED=true IMPACT_AI_PROVIDER=deepseek IMPACT_AI_API_KEY=... IMPACT_AI_MODEL=deepseek-v4-flash npm start
+Inspect the redacted startup AI provider config:
 
-# 通义千问 / DashScope 百炼
-IMPACT_AI_ENABLED=true IMPACT_AI_PROVIDER=qwen IMPACT_AI_API_KEY=... IMPACT_AI_MODEL=qwen-plus npm start
+```bash
+curl -sS http://127.0.0.1:3000/api/v1/ai/providers
+```
 
-# 豆包 / 火山方舟
-IMPACT_AI_ENABLED=true IMPACT_AI_PROVIDER=doubao IMPACT_AI_API_KEY=... IMPACT_AI_MODEL=doubao-pro-32k-240615 npm start
+Project config can select an enabled preset by `provider_id`; if omitted, `default_provider` from `config/ai-providers.json` is used:
 
-# MiniMax
-IMPACT_AI_ENABLED=true IMPACT_AI_PROVIDER=minimax IMPACT_AI_API_KEY=... IMPACT_AI_MODEL=MiniMax-M2.5 npm start
-
-# Custom OpenAI-compatible gateway
-IMPACT_AI_ENABLED=true IMPACT_AI_PROVIDER=openai-compatible IMPACT_AI_BASE_URL=https://ai-gateway.example.com/v1 IMPACT_AI_API_KEY=... IMPACT_AI_MODEL=qwen-coder npm start
+```json
+{
+  "ai": {
+    "provider_id": "qwen",
+    "max_input_tokens": 120000,
+    "max_output_tokens": 8000
+  }
+}
 ```
 
 The request can still disable AI per task:

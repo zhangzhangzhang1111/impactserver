@@ -69,6 +69,11 @@ function createApp({ taskService, config, logger = createNoopLogger() }) {
         return;
       }
 
+      if (req.method === 'GET' && url.pathname === '/api/v1/ai/providers') {
+        sendJson(res, 200, taskService.getAiProvidersPublic());
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/v1/worker/stats') {
         const stats = taskService.taskRunner && taskService.taskRunner.stats
           ? taskService.taskRunner.stats()

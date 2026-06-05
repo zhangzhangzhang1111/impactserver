@@ -13,8 +13,7 @@
         "enable_static_rules": true
       },
       "ai": {
-        "provider": "qwen",
-        "model": "qwen-plus",
+        "provider_id": "qwen",
         "max_input_tokens": 120000,
         "max_output_tokens": 8000
       },

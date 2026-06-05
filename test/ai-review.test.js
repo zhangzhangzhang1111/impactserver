@@ -95,13 +95,19 @@ test('buildAiReviewChunks includes AI output constraints in fixed context', () =
 });
 
 test('applyAiConfigDefaults adds global max output tokens without overwriting request value', () => {
+  const config = {
+    aiProviders: {
+      default_provider: 'qwen',
+      providers: [{ id: 'qwen', enabled: true, maxOutputTokens: 4096 }]
+    }
+  };
   const withDefault = applyAiConfigDefaults(
     { project: { name: 'demo' }, ai: {} },
-    { ai: { maxOutputTokens: 4096 } }
+    config
   );
   const withOverride = applyAiConfigDefaults(
     { project: { name: 'demo' }, ai: { max_output_tokens: 1024 } },
-    { ai: { maxOutputTokens: 4096 } }
+    config
   );
 
   assert.equal(withDefault.ai.max_output_tokens, 4096);
@@ -536,6 +542,72 @@ test('runAiReview lets request AI provider override global provider while inheri
   assert.equal(result.usage.provider, 'qwen');
 });
 
+test('runAiReview uses JSON default provider config and project provider_id override', async () => {
+  const calls = [];
+  const aiProviders = {
+    default_provider: 'qwen',
+    providers: [
+      {
+        id: 'qwen',
+        enabled: true,
+        provider: 'qwen',
+        apiKey: 'qwen-key',
+        model: 'qwen-plus',
+        maxOutputTokens: 1000,
+        timeoutMs: 1000,
+        maxRetries: 0,
+        fetchImpl: fakeReviewFetch('qwen-plus', calls)
+      },
+      {
+        id: 'deepseek',
+        enabled: true,
+        provider: 'deepseek',
+        apiKey: 'deepseek-key',
+        model: 'deepseek-v4-flash',
+        maxOutputTokens: 2000,
+        timeoutMs: 1000,
+        maxRetries: 0,
+        fetchImpl: fakeReviewFetch('deepseek-v4-flash', calls)
+      }
+    ]
+  };
+
+  const defaultResult = await runAiReview({
+    request: {
+      project: { name: 'demo' },
+      options: { enable_ai_review: true },
+      languages: ['python']
+    },
+    config: { aiProviders },
+    fileChanges: [{ file: 'a.py', added_lines: [{ line: 1, text: 'value = 1' }] }],
+    symbols: [],
+    staticFindings: [],
+    reviewConfig: {}
+  });
+  const overrideResult = await runAiReview({
+    request: {
+      project: { name: 'demo' },
+      options: { enable_ai_review: true },
+      ai: { provider_id: 'deepseek' },
+      languages: ['python']
+    },
+    config: { aiProviders },
+    fileChanges: [{ file: 'a.py', added_lines: [{ line: 1, text: 'value = 1' }] }],
+    symbols: [],
+    staticFindings: [],
+    reviewConfig: {}
+  });
+
+  assert.equal(defaultResult.usage.provider, 'qwen');
+  assert.equal(overrideResult.usage.provider, 'deepseek');
+  assert.equal(calls[0].url, 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions');
+  assert.equal(calls[0].body.model, 'qwen-plus');
+  assert.equal(calls[0].body.max_tokens, 1000);
+  assert.equal(calls[1].url, 'https://api.deepseek.com/chat/completions');
+  assert.equal(calls[1].body.model, 'deepseek-v4-flash');
+  assert.equal(calls[1].body.max_tokens, 2000);
+});
+
 test('runAiReview caps findings per chunk and records aggregation metadata', async () => {
   const result = await runAiReview({
     request: {
@@ -622,5 +694,16 @@ function response(status, body) {
     statusText: String(status),
     json: async () => body,
     text: async () => JSON.stringify(body)
+  };
+}
+
+function fakeReviewFetch(model, calls) {
+  return async (url, options) => {
+    calls.push({ url, options, body: JSON.parse(options.body) });
+    return response(200, {
+      model,
+      usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+      choices: [{ message: { content: JSON.stringify({ findings: [] }) } }]
+    });
   };
 }

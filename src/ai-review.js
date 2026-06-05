@@ -61,7 +61,8 @@ async function runAiReview({ request, config, fileChanges, symbols, staticFindin
 }
 
 function applyAiConfigDefaults(request, config) {
-  const maxOutputTokens = Number(config && config.ai && config.ai.maxOutputTokens);
+  const provider = selectConfiguredProvider(request, config);
+  const maxOutputTokens = Number(provider && provider.maxOutputTokens);
   if (!Number.isFinite(maxOutputTokens) || maxOutputTokens <= 0) return request;
   const requestAi = request.ai || {};
   if (requestAi.max_output_tokens) return request;
@@ -91,7 +92,7 @@ function capFindingsForChunk(findings, chunk, usage) {
 function shouldRunAiReview(request, config) {
   const option = request.options && request.options.enable_ai_review;
   if (option === false) return false;
-  if (option !== true && !(config.ai && config.ai.enabled)) return false;
+  if (option !== true && !hasEnabledDefaultProvider(config)) return false;
   return Boolean(resolveProvider(request, config, false));
 }
 
@@ -118,16 +119,34 @@ function resolveProvider(request, config, throwOnMissing = true) {
 function mergeAiProviderConfig(request, config) {
   const globalAi = (config && config.ai) || {};
   const requestAi = (request && request.ai) || {};
+  const configuredProvider = selectConfiguredProvider(request, config);
   return {
     ...globalAi,
+    ...(configuredProvider || {}),
     ...normalizeAiConfigKeys(requestAi),
-    apiKey: requestAi.api_key || requestAi.apiKey || globalAi.apiKey,
-    baseUrl: requestAi.base_url || requestAi.baseUrl || globalAi.baseUrl,
-    timeoutMs: requestAi.timeout_ms || requestAi.timeoutMs || globalAi.timeoutMs,
-    maxRetries: requestAi.max_retries || requestAi.maxRetries || globalAi.maxRetries,
-    maxOutputTokens: requestAi.max_output_tokens || requestAi.maxOutputTokens || globalAi.maxOutputTokens,
-    anthropicVersion: requestAi.anthropic_version || requestAi.anthropicVersion || globalAi.anthropicVersion
+    apiKey: requestAi.api_key || requestAi.apiKey || (configuredProvider && configuredProvider.apiKey) || globalAi.apiKey,
+    baseUrl: requestAi.base_url || requestAi.baseUrl || (configuredProvider && configuredProvider.baseUrl) || globalAi.baseUrl,
+    timeoutMs: requestAi.timeout_ms || requestAi.timeoutMs || (configuredProvider && configuredProvider.timeoutMs) || globalAi.timeoutMs,
+    maxRetries: requestAi.max_retries || requestAi.maxRetries || (configuredProvider && configuredProvider.maxRetries) || globalAi.maxRetries,
+    maxOutputTokens: requestAi.max_output_tokens || requestAi.maxOutputTokens || (configuredProvider && configuredProvider.maxOutputTokens) || globalAi.maxOutputTokens,
+    anthropicVersion: requestAi.anthropic_version || requestAi.anthropicVersion || (configuredProvider && configuredProvider.anthropicVersion) || globalAi.anthropicVersion
   };
+}
+
+function selectConfiguredProvider(request, config) {
+  const aiProviders = config && config.aiProviders;
+  if (!aiProviders || !Array.isArray(aiProviders.providers)) return null;
+  const requestAi = (request && request.ai) || {};
+  const providerId = requestAi.provider_id || requestAi.providerId || aiProviders.default_provider;
+  const provider = aiProviders.providers.find((item) => item.id === providerId);
+  return provider && provider.enabled ? provider : null;
+}
+
+function hasEnabledDefaultProvider(config) {
+  const aiProviders = config && config.aiProviders;
+  if (!aiProviders || !Array.isArray(aiProviders.providers)) return false;
+  const provider = aiProviders.providers.find((item) => item.id === aiProviders.default_provider);
+  return Boolean(provider && provider.enabled);
 }
 
 function normalizeAiConfigKeys(ai) {
@@ -265,5 +284,6 @@ module.exports = {
   capFindingsForChunk,
   applyAiConfigDefaults,
   mergeAiProviderConfig,
-  resolveProvider
+  resolveProvider,
+  selectConfiguredProvider
 };

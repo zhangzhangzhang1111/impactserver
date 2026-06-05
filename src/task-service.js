@@ -4,6 +4,7 @@ const { analyze } = require('./analyzer');
 const { mergeProjectConfigIntoRequest } = require('./project-config-store');
 const { TaskRunner } = require('./task-runner');
 const { createNoopLogger } = require('./logger');
+const { redactProvider } = require('./ai-provider-config-store');
 
 const STAGES = {
   pending: 'PENDING',
@@ -132,6 +133,16 @@ class TaskService {
       limit: history.limit,
       offset: history.offset,
       tasks
+    };
+  }
+
+  getAiProvidersPublic() {
+    const aiProviders = this.config.aiProviders || { default_provider: '', providers: [] };
+    return {
+      default_provider: aiProviders.default_provider || '',
+      providers: Array.isArray(aiProviders.providers)
+        ? aiProviders.providers.map(redactProvider)
+        : []
     };
   }
 

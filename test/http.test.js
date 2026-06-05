@@ -98,6 +98,39 @@ test('project config routes return public project defaults', async () => {
   assert.equal(missing.body.error, 'project_config_not_found');
 });
 
+test('AI provider route returns redacted startup presets', async () => {
+  const app = await createTestApp({
+    configOverrides: {
+      aiProviders: {
+        default_provider: 'qwen',
+        providers: [
+          {
+            id: 'qwen',
+            name: '通义千问',
+            enabled: true,
+            provider: 'qwen',
+            model: 'qwen-plus',
+            apiKey: 'secret',
+            apiKeyEnv: 'DASHSCOPE_API_KEY',
+            maxOutputTokens: 8000,
+            timeoutMs: 60000,
+            maxRetries: 2
+          }
+        ]
+      }
+    }
+  });
+
+  const response = await request(app, { path: '/api/v1/ai/providers' });
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.body.default_provider, 'qwen');
+  assert.equal(response.body.providers[0].id, 'qwen');
+  assert.equal(response.body.providers[0].has_api_key, true);
+  assert.equal(response.body.providers[0].apiKey, undefined);
+  assert.equal(response.body.providers[0].api_key, undefined);
+});
+
 test('task cancel route cancels pending task', async () => {
   const app = await createTestApp();
   const submit = await request(app, {
